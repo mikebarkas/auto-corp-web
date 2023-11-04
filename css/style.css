@@ -1,0 +1,83 @@
+body {
+    background: aliceblue;
+    font-family: sans-serif;
+}
+
+#wrapper {
+    background: white;
+    border: 1px solid #ededed;
+    border-radius: 5px;
+    margin: 10px auto;
+    max-width: 80%;
+    padding: 10px 20px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 135px 1fr;
+    margin-bottom: 20px;
+}
+.grid-container h1 {
+    margin: 0;
+    align-self: center;
+}
+.grid-container img {
+    display: block;
+    justify-self: center;
+}
+
+.navbar {
+    padding: 0 20px;
+}
+.navbar a {
+    color: steelblue;
+    display: inline-block;
+    width: 60px;
+}
+navbar a:visited {
+    color: steelblue;
+}
+
+.content {
+    padding: 20px;
+}
+
+table {
+
+    border: 1px solid #ededed;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+table tr {
+    border-bottom: 1px solid #f6f6f6;
+    display: block;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+table th,
+table td {
+    min-width: 100px;
+    text-align: center;
+}
+
+footer {
+    border-top: 1px solid #ededed;
+    font-size: 14px;
+    margin-top: 30px;
+    padding: 20px 0 0 20px;
+}
+
+form {
+    padding: 20px;
+    border: 1px solid #ededed;
+    max-width: 380px;
+}
+
+form select {
+    padding: 10px;
+}
+form input[type="submit"] {
+    padding: 10px;
+}
