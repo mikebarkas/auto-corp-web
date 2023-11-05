@@ -1,4 +1,3 @@
-# import bottle
 from bottle import route, get, run, static_file, view, template, post, request
 import json
 import requests
@@ -71,6 +70,9 @@ def search_price_results():
     }
 
 
+api_url = 'http://web.mikebarkas.com/search'
+
+
 def make_request(param, value):
     r = requests.get(api_url, params={param: value})
     j = json.loads(r.text)
@@ -85,8 +87,4 @@ def make_request(param, value):
     return x
 
 
-api_url = ''
-# bottle.debug(True)
-# run(reloader=True, host='localhost', port=8081)
-
-run(host='localhost', port=8081)
+run(host='0.0.0.0', port=8081)
