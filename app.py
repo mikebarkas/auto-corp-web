@@ -1,7 +1,9 @@
 from bottle import route, get, run, static_file, view, template, post, request
+from os import getenv as os_getenv
 import json
 import requests
 
+api_url = os_getenv('API_URL')
 
 @get('/favicon.ico')
 def serve_favicon():
@@ -68,9 +70,6 @@ def search_price_results():
         'method': request.method,
         'price': price
     }
-
-
-api_url = 'http://web.mikebarkas.com/search'
 
 
 def make_request(param, value):
