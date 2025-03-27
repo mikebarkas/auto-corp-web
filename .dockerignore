@@ -1,4 +1,7 @@
 venv/
+**/.git
+**/.idea
 .gitignore
+.dockerignore
 README.md
 Containerfile
