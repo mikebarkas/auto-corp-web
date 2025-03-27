@@ -1,20 +1,10 @@
-FROM cgr.dev/chainguard/python:latest-dev AS base
-ENV LANG=C.UTF-8
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PATH="/app/venv/bin:$PATH"
+# syntax=docker/dockerfile:1.4
+FROM python:3.14.0a6-alpine3.21
+RUN addgroup -S nonroot && adduser -S nonroot -G nonroot -D
+USER nonroot
 WORKDIR /app
-RUN python -m venv /app/venv
 COPY requirements.txt .
-RUN pip install --no-cache -r requirements.txt
-RUN pip install --upgrade bottle
-
-
-FROM cgr.dev/chainguard/python:latest
-WORKDIR /app
-ENV PYTHONUNBUFFERED=1
-ENV PATH="/venv/bin:$PATH"
-COPY --from=base /app/venv /venv
-COPY . ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . /app/
 EXPOSE 8081
 ENTRYPOINT ["python", "/app/app.py"]
