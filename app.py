@@ -13,12 +13,12 @@ def serve_favicon():
 
 
 @get('/images/<filename>.png')
-def server_static(filename):
+def serve_image(filename):
     return static_file('{}.png'.format(filename), root='images/')
 
 
 @get('/css/<filename>.css')
-def server_static(filename):
+def serve_css(filename):
     return static_file('{}.css'.format(filename), root='css/')
 
 
