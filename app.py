@@ -45,8 +45,7 @@ def search_make_results():
     d = make_request('make', make)
     return {
         'data': d['data'],
-        # Fix this tuple value? to an int
-        'results': d['results'][0],
+        'results': d['results'],
         'method': request.method,
         'make': make
     }
@@ -65,8 +64,7 @@ def search_price_results():
     d = make_request('price', price)
     return {
         'data': d['data'],
-        # Fix this tuple value? to an int
-        'results': d['results'][0],
+        'results': d['results'],
         'method': request.method,
         'price': price
     }
@@ -81,7 +79,7 @@ def make_request(param, value):
         'data': []
     }
     if j['Status'] == 'OK':
-        x['results'] = j['Results'],
+        x['results'] = j['Results']
         x['data'] = j['Data']
     return x
 
