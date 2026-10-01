@@ -1,9 +1,11 @@
-from bottle import route, get, run, static_file, view, template, post, request
+from bottle import default_app, route, get, run, static_file, view, template, post, request
 from os import getenv as os_getenv
-import json
+import sys
 import requests
 
 api_url = os_getenv('API_URL')
+if not api_url:
+    sys.exit('API_URL environment variable is not set')
 
 @get('/favicon.ico')
 def serve_favicon():
@@ -11,12 +13,12 @@ def serve_favicon():
 
 
 @get('/images/<filename>.png')
-def server_static(filename):
+def serve_image(filename):
     return static_file('{}.png'.format(filename), root='images/')
 
 
 @get('/css/<filename>.css')
-def server_static(filename):
+def serve_css(filename):
     return static_file('{}.css'.format(filename), root='css/')
 
 
@@ -45,8 +47,8 @@ def search_make_results():
     d = make_request('make', make)
     return {
         'data': d['data'],
-        # Fix this tuple value? to an int
-        'results': d['results'][0],
+        'results': d['results'],
+        'error': d['error'],
         'method': request.method,
         'make': make
     }
@@ -65,25 +67,34 @@ def search_price_results():
     d = make_request('price', price)
     return {
         'data': d['data'],
-        # Fix this tuple value? to an int
-        'results': d['results'][0],
+        'results': d['results'],
+        'error': d['error'],
         'method': request.method,
         'price': price
     }
 
 
 def make_request(param, value):
-    r = requests.get(api_url, params={param: value})
-    j = json.loads(r.text)
-
     x = {
         'results': 0,
-        'data': []
+        'data': [],
+        'error': False
     }
-    if j['Status'] == 'OK':
-        x['results'] = j['Results'],
+    try:
+        r = requests.get(api_url, params={param: value}, timeout=5)
+        r.raise_for_status()
+        j = r.json()
+    except (requests.RequestException, ValueError):
+        x['error'] = True
+        return x
+
+    if j.get('Status') == 'OK':
+        x['results'] = j['Results']
         x['data'] = j['Data']
     return x
 
 
-run(host='0.0.0.0', port=8081)
+app = default_app()
+
+if __name__ == '__main__':
+    run(host='0.0.0.0', port=8081)

@@ -7,4 +7,4 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app/
 EXPOSE 8081
-ENTRYPOINT ["python", "/app/app.py"]
+ENTRYPOINT ["python", "-m", "gunicorn", "--bind", "0.0.0.0:8081", "--workers", "2", "--preload", "app:app"]
