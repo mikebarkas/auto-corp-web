@@ -1,4 +1,4 @@
-from bottle import route, get, run, static_file, view, template, post, request
+from bottle import default_app, route, get, run, static_file, view, template, post, request
 from os import getenv as os_getenv
 import sys
 import requests
@@ -94,4 +94,7 @@ def make_request(param, value):
     return x
 
 
-run(host='0.0.0.0', port=8081)
+app = default_app()
+
+if __name__ == '__main__':
+    run(host='0.0.0.0', port=8081)
