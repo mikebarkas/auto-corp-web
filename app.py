@@ -1,9 +1,11 @@
 from bottle import route, get, run, static_file, view, template, post, request
 from os import getenv as os_getenv
-import json
+import sys
 import requests
 
 api_url = os_getenv('API_URL')
+if not api_url:
+    sys.exit('API_URL environment variable is not set')
 
 @get('/favicon.ico')
 def serve_favicon():
@@ -46,6 +48,7 @@ def search_make_results():
     return {
         'data': d['data'],
         'results': d['results'],
+        'error': d['error'],
         'method': request.method,
         'make': make
     }
@@ -65,20 +68,27 @@ def search_price_results():
     return {
         'data': d['data'],
         'results': d['results'],
+        'error': d['error'],
         'method': request.method,
         'price': price
     }
 
 
 def make_request(param, value):
-    r = requests.get(api_url, params={param: value})
-    j = json.loads(r.text)
-
     x = {
         'results': 0,
-        'data': []
+        'data': [],
+        'error': False
     }
-    if j['Status'] == 'OK':
+    try:
+        r = requests.get(api_url, params={param: value}, timeout=5)
+        r.raise_for_status()
+        j = r.json()
+    except (requests.RequestException, ValueError):
+        x['error'] = True
+        return x
+
+    if j.get('Status') == 'OK':
         x['results'] = j['Results']
         x['data'] = j['Data']
     return x

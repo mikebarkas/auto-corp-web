@@ -24,7 +24,9 @@
 
 %else:
 
-    %if results > 0:
+    %if error:
+        <p>Search is unavailable. Please try again later.</p>
+    %elif results > 0:
         <h3>There are {{ results }} vehicles priced under {{ price }}</h3>
         % include('table.tpl', data=data)
     %else:
